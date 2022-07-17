@@ -19,6 +19,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void MoveForward(float value);
+	void MoveRight(float value);
+
+	void TurnAtRate(float Rate);
+	void LookUpAtRate(float Rate);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -28,6 +34,14 @@ public:
 
 
 private:
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float BaseTurnRate;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float BaseLookUpRate;
+
+
 	//camera boom positioning the camera behind the character
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
