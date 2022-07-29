@@ -25,6 +25,9 @@ protected:
 	void TurnAtRate(float Rate);
 	void LookUpAtRate(float Rate);
 
+	void Turn(float Value);
+	void LookUp(float Value);
+
 	void FireWeapon();
 
 	bool GetBeamEndLocation(const FVector& MuzzleSocketLocation, FVector& OutBeamLocation);
@@ -33,6 +36,9 @@ protected:
 	void AimingButtonReleased();
 
 	void CameraInterpZoom(float DeltaTime);
+	
+	//set BaseTurnRate and BaseLookUpRate based on aiming
+	void SetLookRates();
 
 
 public:	
@@ -51,7 +57,38 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	float BaseLookUpRate;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	//turn rate while not aiming
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float HipTurnRate;
+
+	//look up rate while not aiming
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float HipLookUpRate;
+
+	//turn rate when aiming
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float AimingTurnRate;
+	
+	//look up rate when aiming
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	float AimingLookUpRate;
+
+	 
+	 /*----------------------------------------------*/
+	/*for mouse aiming scale factors*/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"), meta = (CalmpMin = "0.0", ClamMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+	float MouseHipTurnRate;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"), meta = (CalmpMin = "0.0", ClamMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+	float MouseHipLookUpRate;
+	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"), meta = (CalmpMin = "0.0", ClamMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+	float MouseAimingTurnRate;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"), meta = (CalmpMin = "0.0", ClamMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
+	float MouseAimingLookUpRate;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"), meta = (CalmpMin = "0.0", ClamMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
 	bool bAiming;
 
 
@@ -100,4 +137,6 @@ private:
 public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	FORCEINLINE bool GetAiming() const { return bAiming; }
 };
