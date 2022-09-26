@@ -41,5 +41,5 @@ private:
 
 //for getters and setters
 public:
-
+	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; }
 };

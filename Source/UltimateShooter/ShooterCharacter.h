@@ -56,6 +56,8 @@ protected:
 	UFUNCTION()
 	void AutoFireReset();
 
+	bool TraceUnderCrosshairs(FHitResult& OutHitResult, FVector& OutHitLocation);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
