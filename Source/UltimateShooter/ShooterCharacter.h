@@ -61,6 +61,10 @@ protected:
 	
 	void TraceForItems();
 
+	class AWeapon* SpawnDefaultWeapon();
+
+	void EquipWeapon(AWeapon* WeaponToEquip);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -195,6 +199,17 @@ private:
 	//Smoke Trail for bullets
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	UParticleSystem* BeamParticles;
+
+
+	//Currently equipped weapon
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	AWeapon* EquippedWeapon;
+
+	//Set this in bleprint for the default class
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AWeapon> DefaultWeaponClass;
+
+
 
 
 public:

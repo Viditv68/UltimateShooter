@@ -13,6 +13,8 @@
 #include "Item.h"
 #include "Weapon.h"
 #include "Components/WidgetComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter() :
@@ -87,6 +89,9 @@ void AShooterCharacter::BeginPlay()
 		CameraDefaultFOV = GetFollowCamera()->FieldOfView;
 		CameraCurrentFOV = CameraDefaultFOV;
 	}
+
+	//spawn default weapon and equip it
+	EquipWeapon(SpawnDefaultWeapon());
 }
 
 void AShooterCharacter::MoveForward(float value)
@@ -456,6 +461,36 @@ void AShooterCharacter::TraceForItems()
 	{
 		// No longer overlapping any  item, item last frame should not show widget 
 		TraceHitItemLastFrame->GetPickupWidget()->SetVisibility(false);
+	}
+}
+
+AWeapon* AShooterCharacter::SpawnDefaultWeapon()
+{
+	//check the TSUbclass of variables
+	if (DefaultWeaponClass)
+	{
+		//spawn the weapon
+		return GetWorld()->SpawnActor<AWeapon>(DefaultWeaponClass);
+	}
+	return nullptr;
+}
+
+void AShooterCharacter::EquipWeapon(AWeapon* WeaponToEquip)
+{
+	if (WeaponToEquip)
+	{
+		//set area sphere to ignore all collision channels
+		WeaponToEquip->GetAreaSphere()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+		//setcollision box to ignore all collision channels
+		WeaponToEquip->GetCollisionBox()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+		//get hand socket
+		const USkeletalMeshSocket* HandSocket = GetMesh()->GetSocketByName(FName("RightHandSocket"));
+		if (HandSocket)
+		{
+			//attach weapon to hand
+			HandSocket->AttachActor(WeaponToEquip, GetMesh());
+		}
+		EquippedWeapon = WeaponToEquip;
 	}
 }
 
