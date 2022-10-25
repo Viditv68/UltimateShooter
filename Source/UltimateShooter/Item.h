@@ -68,6 +68,12 @@ protected:
 	//sets properties of the items component based on state
 	void SetItemProperties(EItemState State);
 
+	//called when ItemInterpTimer isa finished
+	void FinishInterping();
+
+	//Handles iterm iterpolation when in the equipInterping state
+	void ItemInterp(float DeltaTime);
+
 
 public:	
 	// Called every frame
@@ -110,6 +116,43 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	EItemState ItemState;
 
+	//the curve asset used for the item's Z location when interping 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	class UCurveFloat* ItemZCurve;
+
+	//starting location when iterping begins
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	FVector ItemInterpStartLocation;
+
+	//Target interp lcoation in froint of the camera
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	FVector CameraTargetLocation;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	bool bInterping;
+
+	//Plays when we start interping
+	FTimerHandle ItemInterpTimer;
+	//Duration of the curve and timer
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	float ZCurveTime;
+
+	//Pointer to the character
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	class AShooterCharacter* Character;
+
+	float ItemInterpX;
+	float ItemInterpY;
+
+	//initial yaw offset between the camera and interping item
+	float InterpInitialYawOffset;
+
+	//Curve used to scale the item when interping
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	UCurveFloat* ItemScaleCurve;
+
+
 	
 
 //for getters and setters
@@ -120,5 +163,8 @@ public:
 	FORCEINLINE EItemState GetItemState() const { return ItemState; }
 	FORCEINLINE USkeletalMeshComponent* GetItemMesh() const { return ItemMesh; }
 	void SetItemState(EItemState State);
+	
+	//called from the AShooterCharacter class
+	void StartItemCurve(AShooterCharacter* Char);
 
 };
